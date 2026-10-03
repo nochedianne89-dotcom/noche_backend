@@ -45,3 +45,10 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 /** @var object $router **/
 
 $router->get('/', 'Welcome::index');
+
+$router->any('api/auth/register', 'ApiController::register');
+$router->any('api/auth/login', 'ApiController::login');
+$router->any('api/auth/refresh', 'ApiController::refresh');
+$router->any('api/auth/logout', 'ApiController::logout');
+$router->any('api/products', 'ApiController::products');
+$router->any('api/products/{id}', 'ApiController::product');

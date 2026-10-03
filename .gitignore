@@ -24,3 +24,4 @@ runtime/*
 
 # OS
 Thumbs.db
+.env
