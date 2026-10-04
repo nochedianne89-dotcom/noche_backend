@@ -91,7 +91,7 @@ private function issue_tokens($user)
         'sub'      => $user['id'],
         'username' => $user['username'],
         'iat'      => time(),
-        'exp'      => time() + 3600,
+        'exp'      => time() + 60,
     ]);
     $refresh = bin2hex(random_bytes(32));
     $this->db->table('refresh_tokens')->insert([
