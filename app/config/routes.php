@@ -52,3 +52,11 @@ $router->any('api/auth/refresh', 'ApiController::refresh');
 $router->any('api/auth/logout', 'ApiController::logout');
 $router->any('api/products', 'ApiController::products');
 $router->any('api/products/{id}', 'ApiController::product');
+
+// Migration Routes
+$router->get('create-migration/{migration_class}', 'MigrationController::create_migration');
+$router->get('migrate', 'MigrationController::migrate');
+$router->get('rollback', 'MigrationController::rollback');
+$router->get('rollback-all', 'MigrationController::rollback_all');
+$router->get('refresh', 'MigrationController::refresh');
+$router->get('status', 'MigrationController::status');

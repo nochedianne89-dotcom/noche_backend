@@ -1,5 +1,35 @@
 <?php
 define('PREVENT_DIRECT_ACCESS', TRUE);
+
+/*
+ * ------------------------------------------------------------------
+ * CORS PREFLIGHT
+ * ------------------------------------------------------------------
+ * Hinahawakan dito ang OPTIONS request bago pa umabot sa router,
+ * para hindi ma-block ng browser ang POST/PUT/DELETE ng React.
+ * Idagdag sa listahan ang URL ng deployed frontend mo.
+ */
+$cors_allowed = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'https://api-tester.marasigan.dev',
+    // 'https://noche-frontend.onrender.com',
+];
+
+$cors_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($cors_origin, $cors_allowed, true)) {
+    header('Access-Control-Allow-Origin: ' . $cors_origin);
+    header('Vary: Origin');
+    header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
 /**
  * ------------------------------------------------------------------
  * LavaLust - an opensource lightweight PHP MVC Framework
@@ -61,7 +91,7 @@ define('PREVENT_DIRECT_ACCESS', TRUE);
 
 /*
  *---------------------------------------------------------------
- * APPLICATION DIRECTORY NAME
+ * PUBLIC DIRECTORY NAME
  *---------------------------------------------------------------
  * This let you set up your public folder where css, js and other public,
  * files will be visible
