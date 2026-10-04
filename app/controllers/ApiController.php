@@ -91,7 +91,7 @@ private function issue_tokens($user)
         'sub'      => $user['id'],
         'username' => $user['username'],
         'iat'      => time(),
-        'exp'      => time() + 60,
+        'exp'      => time() + 3600,
     ]);
     $refresh = bin2hex(random_bytes(32));
     $this->db->table('refresh_tokens')->insert([
@@ -125,32 +125,32 @@ private function issue_tokens($user)
 
     /* ---------- auth ---------- */
 
-    public function register()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') $this->respond(['error' => 'Method not allowed'], 405);
+   public function register()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') $this->respond(['error' => 'Method not allowed'], 405);
 
-        $in       = $this->input();
-        $username = trim($in['username'] ?? '');
-        $email    = trim($in['email'] ?? '');
-        $password = $in['password'] ?? '';
+    $in       = $this->input();
+    $username = trim($in['username'] ?? '');
+    $email    = trim($in['email'] ?? '');
+    $password = $in['password'] ?? '';
 
-        if ($username === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
-            $this->respond(['error' => 'Username, a valid email, and a password of at least 6 characters are required'], 422);
-        }
-        if ($this->db->table('users')->where('username', $username)->get()) {
-            $this->respond(['error' => 'Username already taken'], 409);
-        }
-        if ($this->db->table('users')->where('email', $email)->get()) {
-            $this->respond(['error' => 'Email already registered'], 409);
-        }
-
-        $this->db->table('users')->insert([
-            'username' => $username,
-            'email'    => $email,
-            'password' => password_hash($password, PASSWORD_BCRYPT),
-        ]);
-        $this->respond(['message' => 'User registered successfully'], 201);
+    if ($username === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
+        $this->respond(['error' => 'Username, a valid email, and a password of at least 6 characters are required'], 422);
     }
+    if ($this->db->table('users')->where('username', $username)->get()) {
+        $this->respond(['error' => 'This username is already taken. Please choose a different username.'], 409);
+    }
+    if ($this->db->table('users')->where('email', $email)->get()) {
+        $this->respond(['error' => 'This email is already registered. Please use a different email.'], 409);
+    }
+
+    $this->db->table('users')->insert([
+        'username' => $username,
+        'email'    => $email,
+        'password' => password_hash($password, PASSWORD_BCRYPT),
+    ]);
+    $this->respond(['message' => 'Account created successfully. You can now log in.'], 201);
+}
 
     public function login()
     {
