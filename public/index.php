@@ -13,7 +13,8 @@ $cors_allowed = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'https://api-tester.marasigan.dev',
-    // 'https://noche-frontend.onrender.com',
+    'https://noche-frontend-dctu68ehe-nochedianne89-gmailcoms-projects.vercel.app',
+    'https://noche-frontend.vercel.app',
 ];
 
 $cors_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
